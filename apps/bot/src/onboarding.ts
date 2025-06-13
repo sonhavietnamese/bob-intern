@@ -21,7 +21,7 @@ composer.use(
 )
 
 composer.command('start', async (ctx) => {
-  await ctx.replyWithPhoto('https://localhost:3001/draft/welcomming.png', {
+  await ctx.replyWithPhoto('https://bob-intern-cdn.vercel.app/draft/welcomming.png', {
     caption: 'Welcome! I am Bob, your personal assistant. How can I call you?',
   })
 

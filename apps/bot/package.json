@@ -1,10 +1,11 @@
 {
   "name": "bot",
   "module": "src/index.ts",
-  "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun --watch run src/index.ts"
+    "dev": "bun --watch run src/index.ts",
+    "build": "tsc",
+    "start": "node -r dotenv/config dist/index.js"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -14,6 +15,7 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.8",
+    "dotenv": "^16.5.0",
     "grammy": "^1.36.3",
     "zod": "^3.25.57"
   }

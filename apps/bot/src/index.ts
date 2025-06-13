@@ -1,6 +1,6 @@
-import { Bot, GrammyError, HttpError, InputFile } from 'grammy'
+import 'dotenv/config'
 import type { CallbackQueryContext, Context, SessionFlavor } from 'grammy'
-import { env } from './env'
+import { Bot, GrammyError, HttpError } from 'grammy'
 import onboarding from './onboarding'
 
 interface SessionData {
@@ -10,9 +10,9 @@ interface SessionData {
 
 type MyContext = Context & SessionFlavor<SessionData>
 
-const bot = new Bot<MyContext>(env.TELEGRAM_BOT_TOKEN)
+const bot = new Bot<MyContext>(process.env.TELEGRAM_BOT_TOKEN || '')
 
-await bot.api.setMyCommands([
+bot.api.setMyCommands([
   { command: 'start', description: 'Start the bot' },
   { command: 'help', description: 'Show help text' },
   { command: 'settings', description: 'Open settings' },
