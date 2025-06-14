@@ -1,4 +1,4 @@
-import { OnboardingContext } from '../types'
+import type { OnboardingContext } from '../types'
 
 export async function handleTextMessage(ctx: OnboardingContext) {
   if (ctx.session.waitingForName) {

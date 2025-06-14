@@ -1,5 +1,5 @@
 import { SKILL_GROUPS, USD_RANGES } from '@/constants'
-import { OnboardingContext } from '../types'
+import type { OnboardingContext } from '../types'
 
 // Helper function to update the skills message
 export async function updateSkillsMessage(ctx: OnboardingContext) {

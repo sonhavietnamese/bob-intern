@@ -1,5 +1,5 @@
 import { CommandContext } from 'grammy'
-import { OnboardingContext } from '../types'
+import type { OnboardingContext } from '../types'
 
 export default async function listing(ctx: CommandContext<OnboardingContext>) {
   // Initialize selected listings if not exists

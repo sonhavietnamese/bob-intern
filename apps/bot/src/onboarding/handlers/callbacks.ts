@@ -1,5 +1,5 @@
 import { USD_RANGES } from '@/constants'
-import { OnboardingContext } from '../types'
+import type { OnboardingContext } from '../types'
 import { updateSkillsMessage, updateListingMessage, showUSDRangeSelection } from '../utils/helpers'
 
 export async function handleCallbackQuery(ctx: OnboardingContext) {

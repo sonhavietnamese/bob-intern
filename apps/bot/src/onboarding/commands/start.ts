@@ -1,5 +1,5 @@
 import { CommandContext } from 'grammy'
-import { OnboardingContext } from '../types'
+import type { OnboardingContext } from '../types'
 
 export default async function start(ctx: CommandContext<OnboardingContext>) {
   await ctx.replyWithPhoto('https://bob-intern-cdn.vercel.app/draft/welcome.png', {

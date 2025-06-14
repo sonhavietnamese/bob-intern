@@ -1,10 +1,13 @@
 import { Composer, session } from 'grammy'
+
 import expertiseCommand from './commands/expertise'
 import listingCommand from './commands/listing'
 import startCommand from './commands/start'
+
 import { handleCallbackQuery } from './handlers/callbacks'
 import { handleTextMessage } from './handlers/messages'
-import { OnboardingContext, OnboardingSessionData } from './types'
+
+import type { OnboardingContext, OnboardingSessionData } from './types'
 
 export const composer = new Composer<OnboardingContext>()
 
@@ -16,6 +19,12 @@ const sessionMiddleware = session({
     }
   },
 })
+
+export const commands = [
+  { command: 'start', description: 'Start the bot' },
+  { command: 'listing', description: 'Open listings' },
+  { command: 'expertise', description: 'Open expertise' },
+]
 
 composer.use(sessionMiddleware)
 
