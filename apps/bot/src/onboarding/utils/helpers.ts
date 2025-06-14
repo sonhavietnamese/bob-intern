@@ -1,28 +1,28 @@
-import { SKILL_GROUPS, USD_RANGES } from '@/constants'
+import { EXPERTISE_GROUPS, USD_RANGES } from '@/constants'
 import type { OnboardingContext } from '../types'
 
 // Helper function to update the skills message
-export async function updateSkillsMessage(ctx: OnboardingContext) {
-  const selectedSkillsText = ctx.session.selectedSkills!.length > 0 ? `\n\nSelected skills: ${ctx.session.selectedSkills!.join(', ')}` : ''
+export async function updateExpertiseMessage(ctx: OnboardingContext) {
+  const selectedExpertiseText = ctx.session.selectedExpertise!.length > 0 ? `\n\nSelected: ${ctx.session.selectedExpertise!.join(', ')}` : ''
 
   const inlineKeyboard = [
-    ...Object.values(SKILL_GROUPS).map((skill) => {
-      const isSelected = ctx.session.selectedSkills!.includes(skill)
+    ...Object.values(EXPERTISE_GROUPS).map((expertise) => {
+      const isSelected = ctx.session.selectedExpertise!.includes(expertise)
       const checkbox = isSelected ? '✅' : '☐'
       return [
-        { text: `${skill}`, callback_data: `toggle_${skill}` },
+        { text: `${expertise}`, callback_data: `toggle_${expertise}` },
         {
           text: `${checkbox}`,
-          callback_data: `toggle_${skill}`,
+          callback_data: `toggle_${expertise}`,
         },
       ]
     }),
-    [{ text: 'Done', callback_data: 'skills_done' }],
+    [{ text: 'Done', callback_data: 'expertise_done' }],
   ]
 
   try {
     await ctx.editMessageCaption({
-      caption: `What skills do you have?${selectedSkillsText}`,
+      caption: `What is your expertise?${selectedExpertiseText}`,
       reply_markup: {
         inline_keyboard: inlineKeyboard,
       },
@@ -30,13 +30,13 @@ export async function updateSkillsMessage(ctx: OnboardingContext) {
   } catch (error) {
     // If editing caption fails (might be a text message), try editing text instead
     try {
-      await ctx.editMessageText(`What skills do you have?${selectedSkillsText}`, {
+      await ctx.editMessageText(`What is your expertise?${selectedExpertiseText}`, {
         reply_markup: {
           inline_keyboard: inlineKeyboard,
         },
       })
     } catch (editError) {
-      console.error('Failed to update skills message:', editError)
+      console.error('Failed to update expertise message:', editError)
     }
   }
 }

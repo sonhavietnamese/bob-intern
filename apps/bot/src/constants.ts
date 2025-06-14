@@ -1,4 +1,4 @@
-export const SKILL_GROUPS = {
+export const EXPERTISE_GROUPS = {
   DEV: 'DEV',
   DESIGN: 'DESIGN',
   CONTENT: 'CONTENT',
