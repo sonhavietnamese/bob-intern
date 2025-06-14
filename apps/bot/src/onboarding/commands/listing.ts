@@ -9,8 +9,6 @@ export default async function listing(ctx: CommandContext<OnboardingContext>) {
 
   const listings = ['Bounties', 'Projects']
 
-  const selectedListingsText = ctx.session.selectedListings.length > 0 ? `\n\nSelected: ${ctx.session.selectedListings.join(', ')}` : ''
-
   const inlineKeyboard = [
     ...listings.map((listing) => {
       const isSelected = ctx.session.selectedListings!.includes(listing)
@@ -25,7 +23,7 @@ export default async function listing(ctx: CommandContext<OnboardingContext>) {
 
   try {
     await ctx.replyWithPhoto('https://bob-intern-cdn.vercel.app/draft/welcome.png', {
-      caption: `Superteam Earn comes with Bounties and Projects, which you most prefer?${selectedListingsText}`,
+      caption: `Superteam Earn comes with Bounties and Projects, which you most prefer?`,
       reply_markup: {
         inline_keyboard: inlineKeyboard,
       },
@@ -33,7 +31,7 @@ export default async function listing(ctx: CommandContext<OnboardingContext>) {
   } catch (error) {
     // Fallback to text message if image fails
     console.error('Failed to send listing image:', error)
-    await ctx.reply(`Superteam Earn comes with Bounties and Projects, which you most prefer?${selectedListingsText}`, {
+    await ctx.reply(`Superteam Earn comes with Bounties and Projects, which you most prefer?`, {
       reply_markup: {
         inline_keyboard: inlineKeyboard,
       },

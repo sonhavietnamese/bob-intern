@@ -14,6 +14,7 @@ export const composer = new Composer<OnboardingContext>()
 const sessionMiddleware = session({
   initial(): OnboardingSessionData {
     return {
+      selectedExpertise: [],
       selectedSkills: [],
       selectedListings: [],
     }

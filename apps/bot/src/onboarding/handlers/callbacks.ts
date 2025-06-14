@@ -106,7 +106,7 @@ async function handleRangeSelection(ctx: OnboardingContext, data: string) {
   const selectedRange = USD_RANGES[rangeIndex]
 
   if (selectedRange) {
-    ctx.session.selectedRange = selectedRange.label
+    ctx.session.selectedRange = selectedRange.value
 
     // Send final message with min and max values
     await ctx.editMessageText(
