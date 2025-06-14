@@ -1,4 +1,4 @@
-import { EXPERTISE_GROUPS, USD_RANGES } from '@/constants'
+import { EXPERTISE_GROUPS, SKILLS, USD_RANGES } from '@/constants'
 import type { OnboardingContext } from '../types'
 
 // Helper function to update the skills message
@@ -105,4 +105,82 @@ export async function showUSDRangeSelection(ctx: OnboardingContext) {
       },
     })
   }
+}
+
+export function updateSkillBasedOnExpertise(ctx: OnboardingContext, expertise: string) {
+  const skills = SKILLS[expertise as keyof typeof SKILLS]
+  skills.forEach((skill) => {
+    ctx.session.selectedSkills!.push(skill)
+  })
+}
+
+// Helper function to update the skills message
+export async function updateSkillsMessage(ctx: OnboardingContext) {
+  // Get all skills from selected expertise areas
+  const allAvailableSkills: string[] = []
+  if (ctx.session.selectedExpertise) {
+    ctx.session.selectedExpertise.forEach((expertise) => {
+      const skillsForExpertise = SKILLS[expertise as keyof typeof SKILLS]
+      if (skillsForExpertise) {
+        allAvailableSkills.push(...skillsForExpertise)
+      }
+    })
+  }
+
+  // Remove duplicates
+  const uniqueSkills = [...new Set(allAvailableSkills)]
+
+  const selectedSkillsText = ctx.session.selectedSkills!.length > 0 ? `\n\nSelected: ${ctx.session.selectedSkills!.join(', ')}` : ''
+
+  const inlineKeyboard = [
+    ...uniqueSkills.map((skill) => {
+      const isSelected = ctx.session.selectedSkills!.includes(skill)
+      const checkbox = isSelected ? '✅' : '☐'
+      return [
+        { text: skill, callback_data: `toggle_skill_${skill}` },
+        { text: checkbox, callback_data: `toggle_skill_${skill}` },
+      ]
+    }),
+    [{ text: 'Done', callback_data: 'skills_done' }],
+  ]
+
+  try {
+    await ctx.editMessageCaption({
+      caption: `Select your specific skills${selectedSkillsText}`,
+      reply_markup: {
+        inline_keyboard: inlineKeyboard,
+      },
+    })
+  } catch (error) {
+    // If editing caption fails, try editing text instead
+    try {
+      await ctx.editMessageText(`Select your specific skills${selectedSkillsText}`, {
+        reply_markup: {
+          inline_keyboard: inlineKeyboard,
+        },
+      })
+    } catch (editError) {
+      console.error('Failed to update skills message:', editError)
+    }
+  }
+}
+
+// Helper function to remove expertise if all its skills are unselected
+export function removeExpertiseIfNoSkills(ctx: OnboardingContext) {
+  // Check each expertise and remove if no skills from that expertise are selected
+  const expertiseToRemove: string[] = []
+
+  ctx.session.selectedExpertise!.forEach((expertise) => {
+    const expertiseSkills = SKILLS[expertise as keyof typeof SKILLS]
+    const hasSelectedSkills = expertiseSkills.some((skill) => ctx.session.selectedSkills!.includes(skill))
+
+    if (!hasSelectedSkills) {
+      expertiseToRemove.push(expertise)
+    }
+  })
+
+  // Remove expertise that have no selected skills
+  expertiseToRemove.forEach((expertise) => {
+    ctx.session.selectedExpertise = ctx.session.selectedExpertise!.filter((e) => e !== expertise)
+  })
 }

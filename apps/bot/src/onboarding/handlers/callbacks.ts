@@ -1,6 +1,13 @@
 import { USD_RANGES } from '@/constants'
 import type { OnboardingContext } from '../types'
-import { updateExpertiseMessage, updateListingMessage, showUSDRangeSelection } from '../utils/helpers'
+import {
+  updateExpertiseMessage,
+  updateListingMessage,
+  showUSDRangeSelection,
+  updateSkillBasedOnExpertise,
+  updateSkillsMessage,
+  removeExpertiseIfNoSkills,
+} from '../utils/helpers'
 
 export async function handleCallbackQuery(ctx: OnboardingContext) {
   if (!ctx.callbackQuery?.data) {
@@ -23,10 +30,14 @@ export async function handleCallbackQuery(ctx: OnboardingContext) {
 
   if (data.startsWith('toggle_listing_')) {
     await handleListingToggle(ctx, data)
+  } else if (data.startsWith('toggle_skill_')) {
+    await handleSkillToggle(ctx, data)
   } else if (data.startsWith('toggle_')) {
     await handleExpertiseToggle(ctx, data)
   } else if (data === 'expertise_done') {
     await handleExpertiseDone(ctx)
+  } else if (data === 'skills_done') {
+    await handleSkillsDone(ctx)
   } else if (data === 'listing_done') {
     await handleListingDone(ctx)
   } else if (data.startsWith('select_range_')) {
@@ -53,6 +64,21 @@ async function handleListingToggle(ctx: OnboardingContext, data: string) {
   await updateListingMessage(ctx)
 }
 
+async function handleSkillToggle(ctx: OnboardingContext, data: string) {
+  const skill = data.replace('toggle_skill_', '')
+
+  if (ctx.session.selectedSkills!.includes(skill)) {
+    // Remove from selected skills
+    ctx.session.selectedSkills = ctx.session.selectedSkills!.filter((s) => s !== skill)
+  } else {
+    // Add to selected skills
+    ctx.session.selectedSkills!.push(skill)
+  }
+
+  // Update the message
+  await updateSkillsMessage(ctx)
+}
+
 async function handleExpertiseToggle(ctx: OnboardingContext, data: string) {
   const expertise = data.replace('toggle_', '')
 
@@ -62,6 +88,7 @@ async function handleExpertiseToggle(ctx: OnboardingContext, data: string) {
   } else {
     // Add to selected expertise
     ctx.session.selectedExpertise!.push(expertise)
+    updateSkillBasedOnExpertise(ctx, expertise)
   }
 
   // Update the message
@@ -83,6 +110,26 @@ async function handleExpertiseDone(ctx: OnboardingContext) {
   } catch (error) {
     // Fallback to editing text if caption fails
     await ctx.editMessageText(selectedExpertiseText, {
+      reply_markup: { inline_keyboard: [] },
+    })
+  }
+}
+
+async function handleSkillsDone(ctx: OnboardingContext) {
+  // Clean up expertise that have no selected skills
+  removeExpertiseIfNoSkills(ctx)
+
+  const selectedSkillsText =
+    ctx.session.selectedSkills!.length > 0 ? `Great! You've selected these skills: ${ctx.session.selectedSkills!.join(', ')}` : 'No skills selected.'
+
+  try {
+    await ctx.editMessageCaption({
+      caption: selectedSkillsText,
+      reply_markup: { inline_keyboard: [] },
+    })
+  } catch (error) {
+    // Fallback to editing text if caption fails
+    await ctx.editMessageText(selectedSkillsText, {
       reply_markup: { inline_keyboard: [] },
     })
   }

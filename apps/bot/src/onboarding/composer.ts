@@ -3,6 +3,7 @@ import { Composer, session } from 'grammy'
 import expertiseCommand from './commands/expertise'
 import listingCommand from './commands/listing'
 import startCommand from './commands/start'
+import skillsCommand from './commands/skills'
 
 import { handleCallbackQuery } from './handlers/callbacks'
 import { handleTextMessage } from './handlers/messages'
@@ -25,6 +26,7 @@ export const commands = [
   { command: 'start', description: 'Start the bot' },
   { command: 'listing', description: 'Open listings' },
   { command: 'expertise', description: 'Open expertise' },
+  { command: 'skills', description: 'Open skills' },
 ]
 
 composer.use(sessionMiddleware)
@@ -33,6 +35,7 @@ composer.use(sessionMiddleware)
 composer.command('start', startCommand)
 composer.command('expertise', expertiseCommand)
 composer.command('listing', listingCommand)
+composer.command('skills', skillsCommand)
 
 // Register event handlers
 composer.on('callback_query:data', handleCallbackQuery)

@@ -4,7 +4,15 @@ export const EXPERTISE_GROUPS = {
   CONTENT: 'CONTENT',
   GROWTH: 'GROWTH',
   COMMUNITY: 'COMMUNITY',
-}
+} as const
+
+export const SKILLS: Record<keyof typeof EXPERTISE_GROUPS, string[]> = {
+  DEV: ['FRONTEND', 'BACKEND', 'BLOCKCHAIN', 'MOBILE'],
+  DESIGN: ['UI/UX', 'GRAPHIC', 'GAME'],
+  CONTENT: ['RESEARCH', 'SOCIAL'],
+  GROWTH: ['BUSINESS_DEVELOPMENT', 'MARKETING'],
+  COMMUNITY: ['COMMUNITY_MANAGER', 'SOCIAL_MODERATOR'],
+} as const
 
 export const LISTINGS = ['Bounties', 'Projects']
 
