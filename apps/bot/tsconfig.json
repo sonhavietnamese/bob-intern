@@ -33,7 +33,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@/constants": ["./src/constants.ts"]
+      "@/constants": ["./src/constants.ts"],
+      "@/onboarding": ["./src/onboarding/*"]
     }
   },
   "include": ["src/**/*"],

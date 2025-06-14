@@ -1,5 +1,5 @@
 import { EXPERTISE_GROUPS, SKILLS, USD_RANGES } from '@/constants'
-import type { OnboardingContext } from '../types'
+import type { OnboardingContext } from '@/onboarding/types'
 
 // Helper function to update the skills message
 export async function updateExpertiseMessage(ctx: OnboardingContext) {
@@ -86,7 +86,7 @@ export async function showUSDRangeSelection(ctx: OnboardingContext) {
   ])
 
   try {
-    await ctx.replyWithPhoto('https://bob-intern-cdn.vercel.app/draft/range.png', {
+    await ctx.replyWithPhoto('https://bob-intern-cdn.vercel.app/range.png', {
       caption: 'What is your preferred USD range for projects?',
       reply_markup: {
         inline_keyboard: inlineKeyboard,
@@ -201,7 +201,7 @@ export async function showListingSelection(ctx: OnboardingContext) {
   ]
 
   try {
-    await ctx.replyWithPhoto('https://bob-intern-cdn.vercel.app/draft/listing.png', {
+    await ctx.replyWithPhoto('https://bob-intern-cdn.vercel.app/listing.png', {
       caption: `Superteam Earn comes with Bounties and Projects, which you most prefer?`,
       reply_markup: {
         inline_keyboard: inlineKeyboard,

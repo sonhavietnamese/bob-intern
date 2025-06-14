@@ -1,5 +1,5 @@
-import type { OnboardingContext } from '../types'
-import { handleNameInput } from '../utils/helpers'
+import type { OnboardingContext } from '@/onboarding/types'
+import { handleNameInput } from '@/onboarding/utils/helpers'
 
 export async function handleTextMessage(ctx: OnboardingContext) {
   // Check if we're waiting for name input

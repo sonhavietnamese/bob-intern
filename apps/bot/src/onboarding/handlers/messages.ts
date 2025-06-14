@@ -1,5 +1,5 @@
-import type { OnboardingContext } from '../types'
-import expertise from '../commands/expertise'
+import type { OnboardingContext } from '@/onboarding/types'
+import expertise from '@/onboarding/commands/expertise'
 
 export async function handleTextMessage(ctx: OnboardingContext) {
   if (ctx.session.waitingForName) {

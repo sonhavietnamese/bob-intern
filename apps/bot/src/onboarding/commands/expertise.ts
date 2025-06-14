@@ -1,6 +1,6 @@
 import { CommandContext } from 'grammy'
-import type { OnboardingContext } from '../types'
-import { getMissingOnboardingSteps, startOnboardingFlow, showExpertiseSelection, checkPrerequisites } from '../utils/helpers'
+import type { OnboardingContext } from '@/onboarding/types'
+import { getMissingOnboardingSteps, startOnboardingFlow, showExpertiseSelection, checkPrerequisites } from '@/onboarding/utils/helpers'
 
 export default async function expertise(ctx: CommandContext<OnboardingContext>) {
   // Check if prerequisites are missing

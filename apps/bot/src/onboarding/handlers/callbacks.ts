@@ -1,15 +1,13 @@
 import { USD_RANGES } from '@/constants'
-import type { OnboardingContext } from '../types'
+import type { OnboardingContext } from '@/onboarding/types'
 import {
+  proceedToNextOnboardingStep,
+  removeExpertiseIfNoSkills,
   updateExpertiseMessage,
   updateListingMessage,
-  showUSDRangeSelection,
   updateSkillBasedOnExpertise,
   updateSkillsMessage,
-  removeExpertiseIfNoSkills,
-  showListingSelection,
-  proceedToNextOnboardingStep,
-} from '../utils/helpers'
+} from '@/onboarding/utils/helpers'
 
 export async function handleCallbackQuery(ctx: OnboardingContext) {
   if (!ctx.callbackQuery?.data) {
@@ -176,13 +174,19 @@ async function handleRangeSelection(ctx: OnboardingContext, data: string) {
   if (selectedRange) {
     ctx.session.selectedRange = selectedRange.value
 
-    // Send final message with min and max values
-    await ctx.editMessageText(
-      `Perfect! You've selected "${selectedRange.label}" with a range of $${selectedRange.value.min} - $${selectedRange.value.max}`,
-      {
+    const selectedRangeText = `Perfect! You've selected "${selectedRange.label}" with a range of $${selectedRange.value.min} - $${selectedRange.value.max}`
+
+    try {
+      await ctx.editMessageCaption({
+        caption: selectedRangeText,
         reply_markup: { inline_keyboard: [] },
-      },
-    )
+      })
+    } catch (error) {
+      // Fallback to editing text if caption fails
+      await ctx.editMessageText(selectedRangeText, {
+        reply_markup: { inline_keyboard: [] },
+      })
+    }
 
     // If in onboarding flow, proceed to next step; otherwise just finish
     if (ctx.session.isOnboarding) {
