@@ -1,0 +1,119 @@
+import { USD_RANGES } from '@/constants'
+import { OnboardingContext } from '../types'
+import { updateSkillsMessage, updateListingMessage, showUSDRangeSelection } from '../utils/helpers'
+
+export async function handleCallbackQuery(ctx: OnboardingContext) {
+  if (!ctx.callbackQuery?.data) {
+    return
+  }
+
+  const data = ctx.callbackQuery.data
+
+  if (!ctx.session.selectedSkills) {
+    ctx.session.selectedSkills = []
+  }
+
+  if (!ctx.session.selectedListings) {
+    ctx.session.selectedListings = []
+  }
+
+  if (data.startsWith('toggle_listing_')) {
+    await handleListingToggle(ctx, data)
+  } else if (data.startsWith('toggle_')) {
+    await handleSkillToggle(ctx, data)
+  } else if (data === 'skills_done') {
+    await handleSkillsDone(ctx)
+  } else if (data === 'listing_done') {
+    await handleListingDone(ctx)
+  } else if (data.startsWith('select_range_')) {
+    await handleRangeSelection(ctx, data)
+  }
+
+  // Answer the callback query to remove loading state
+  await ctx.answerCallbackQuery()
+}
+
+async function handleListingToggle(ctx: OnboardingContext, data: string) {
+  const listing = data.replace('toggle_listing_', '')
+  const listingName = listing === 'bounties' ? 'Bounties' : 'Projects'
+
+  if (ctx.session.selectedListings!.includes(listingName)) {
+    // Remove from selected listings
+    ctx.session.selectedListings = ctx.session.selectedListings!.filter((l) => l !== listingName)
+  } else {
+    // Add to selected listings
+    ctx.session.selectedListings!.push(listingName)
+  }
+
+  // Update the message
+  await updateListingMessage(ctx)
+}
+
+async function handleSkillToggle(ctx: OnboardingContext, data: string) {
+  const skill = data.replace('toggle_', '')
+
+  if (ctx.session.selectedSkills!.includes(skill)) {
+    // Remove from selected skills
+    ctx.session.selectedSkills = ctx.session.selectedSkills!.filter((s) => s !== skill)
+  } else {
+    // Add to selected skills
+    ctx.session.selectedSkills!.push(skill)
+  }
+
+  // Update the message
+  await updateSkillsMessage(ctx)
+}
+
+async function handleSkillsDone(ctx: OnboardingContext) {
+  const selectedSkillsText =
+    ctx.session.selectedSkills!.length > 0 ? `Great! You've selected these skills: ${ctx.session.selectedSkills!.join(', ')}` : 'No skills selected.'
+
+  try {
+    await ctx.editMessageCaption({
+      caption: selectedSkillsText,
+      reply_markup: { inline_keyboard: [] },
+    })
+  } catch (error) {
+    // Fallback to editing text if caption fails
+    await ctx.editMessageText(selectedSkillsText, {
+      reply_markup: { inline_keyboard: [] },
+    })
+  }
+}
+
+async function handleListingDone(ctx: OnboardingContext) {
+  const selectedListingsText =
+    ctx.session.selectedListings!.length > 0 ? `Great! You prefer: ${ctx.session.selectedListings!.join(', ')}` : 'No preference selected.'
+
+  try {
+    await ctx.editMessageCaption({
+      caption: selectedListingsText,
+      reply_markup: { inline_keyboard: [] },
+    })
+  } catch (error) {
+    // Fallback to editing text if caption fails
+    await ctx.editMessageText(selectedListingsText, {
+      reply_markup: { inline_keyboard: [] },
+    })
+  }
+
+  // Show USD range selection
+  await showUSDRangeSelection(ctx)
+}
+
+async function handleRangeSelection(ctx: OnboardingContext, data: string) {
+  const rangeIndex = parseInt(data.replace('select_range_', ''))
+  const selectedRange = USD_RANGES[rangeIndex]
+
+  if (selectedRange) {
+    ctx.session.selectedRange = selectedRange.label
+
+    // Send final message with min and max values
+    await ctx.editMessageText(
+      `Perfect! You've selected "${selectedRange.label}" with a range of $${selectedRange.value.min} - $${selectedRange.value.max}`,
+      {
+        reply_markup: { inline_keyboard: [] },
+      },
+    )
+  }
+}

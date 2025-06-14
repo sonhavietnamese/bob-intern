@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import type { Context, SessionFlavor } from 'grammy'
 import { Bot } from 'grammy'
-import onboarding from './onboarding'
+import onboarding from './onboarding/composer'
 
 interface SessionData {
   waitingForName?: boolean
@@ -9,21 +9,6 @@ interface SessionData {
 }
 
 type MyContext = Context & SessionFlavor<SessionData>
-
-// // Handle inline button callbacks
-// const handleButtonClicked = async (ctx: CallbackQueryContext<MyContext>) => {
-//   // Acknowledge the callback so Telegram removes the "loading" state
-//   await ctx.answerCallbackQuery({})
-
-//   // Respond back in the chat
-//   await ctx.reply('🎉 Button was clicked!')
-//   // remove the button
-//   if (ctx.msg) {
-//     await ctx.api.deleteMessage(ctx.msg.chat.id, ctx.msg.message_id)
-//   }
-// }
-
-// // Register the callback handler
 
 // bot.catch((err) => {
 //   const ctx = err.ctx
@@ -37,15 +22,6 @@ type MyContext = Context & SessionFlavor<SessionData>
 //     console.error('Unknown error:', e)
 //   }
 // })
-
-// bot.on('message_reaction', async (ctx) => {
-//   const { emojiAdded } = ctx.reactions()
-//   if (emojiAdded.includes('🎉')) {
-//     await ctx.reply('partY')
-//   }
-// })
-
-// bot.start()
 
 export const {
   TELEGRAM_BOT_TOKEN: token,
@@ -73,8 +49,10 @@ export const bot = new Bot<MyContext>(token)
 bot.api.setMyCommands([
   { command: 'start', description: 'Start the bot' },
   { command: 'help', description: 'Show help text' },
-  { command: 'settings', description: 'Open settings' },
-  { command: 'onboarding', description: 'Onboarding' },
+  { command: 'listing', description: 'Open listings' },
+  { command: 'skills', description: 'Open skills' },
+  { command: 'expertise', description: 'Open expertise' },
+  { command: 'range', description: 'Open range' },
 ])
 
 bot.use(onboarding)
