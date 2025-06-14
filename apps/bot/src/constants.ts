@@ -1,0 +1,7 @@
+export const SKILL_GROUPS = {
+  DEV: 'DEV',
+  DESIGN: 'DESIGN',
+  CONTENT: 'CONTENT',
+  GROWTH: 'GROWTH',
+  COMMUNITY: 'COMMUNITY',
+}
