@@ -7,6 +7,8 @@ import {
   updateSkillBasedOnExpertise,
   updateSkillsMessage,
   removeExpertiseIfNoSkills,
+  showListingSelection,
+  proceedToNextOnboardingStep,
 } from '../utils/helpers'
 
 export async function handleCallbackQuery(ctx: OnboardingContext) {
@@ -113,6 +115,11 @@ async function handleExpertiseDone(ctx: OnboardingContext) {
       reply_markup: { inline_keyboard: [] },
     })
   }
+
+  // If in onboarding flow, proceed to next step; otherwise just finish
+  if (ctx.session.isOnboarding) {
+    await proceedToNextOnboardingStep(ctx)
+  }
 }
 
 async function handleSkillsDone(ctx: OnboardingContext) {
@@ -133,6 +140,11 @@ async function handleSkillsDone(ctx: OnboardingContext) {
       reply_markup: { inline_keyboard: [] },
     })
   }
+
+  // If in onboarding flow, proceed to next step; otherwise just finish
+  if (ctx.session.isOnboarding) {
+    await proceedToNextOnboardingStep(ctx)
+  }
 }
 
 async function handleListingDone(ctx: OnboardingContext) {
@@ -151,8 +163,10 @@ async function handleListingDone(ctx: OnboardingContext) {
     })
   }
 
-  // Show USD range selection
-  await showUSDRangeSelection(ctx)
+  // If in onboarding flow, proceed to next step; otherwise just finish
+  if (ctx.session.isOnboarding) {
+    await proceedToNextOnboardingStep(ctx)
+  }
 }
 
 async function handleRangeSelection(ctx: OnboardingContext, data: string) {
@@ -169,5 +183,10 @@ async function handleRangeSelection(ctx: OnboardingContext, data: string) {
         reply_markup: { inline_keyboard: [] },
       },
     )
+
+    // If in onboarding flow, proceed to next step; otherwise just finish
+    if (ctx.session.isOnboarding) {
+      await proceedToNextOnboardingStep(ctx)
+    }
   }
 }

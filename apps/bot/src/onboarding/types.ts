@@ -10,6 +10,7 @@ export interface OnboardingSessionData {
     min: number
     max: number
   }
+  isOnboarding?: boolean
 }
 
 export type OnboardingContext = Context & SessionFlavor<OnboardingSessionData>

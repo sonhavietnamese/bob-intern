@@ -4,6 +4,7 @@ import expertiseCommand from './commands/expertise'
 import listingCommand from './commands/listing'
 import startCommand from './commands/start'
 import skillsCommand from './commands/skills'
+import rangeCommand from './commands/range'
 
 import { handleCallbackQuery } from './handlers/callbacks'
 import { handleTextMessage } from './handlers/messages'
@@ -27,6 +28,7 @@ export const commands = [
   { command: 'listing', description: 'Open listings' },
   { command: 'expertise', description: 'Open expertise' },
   { command: 'skills', description: 'Open skills' },
+  { command: 'range', description: 'Open range' },
 ]
 
 composer.use(sessionMiddleware)
@@ -36,6 +38,7 @@ composer.command('start', startCommand)
 composer.command('expertise', expertiseCommand)
 composer.command('listing', listingCommand)
 composer.command('skills', skillsCommand)
+composer.command('range', rangeCommand)
 
 // Register event handlers
 composer.on('callback_query:data', handleCallbackQuery)

@@ -1,40 +1,25 @@
 import { CommandContext } from 'grammy'
 import type { OnboardingContext } from '../types'
+import { getMissingOnboardingSteps, startOnboardingFlow, showListingSelection, checkPrerequisites } from '../utils/helpers'
 
 export default async function listing(ctx: CommandContext<OnboardingContext>) {
-  // Initialize selected listings if not exists
-  if (!ctx.session.selectedListings) {
-    ctx.session.selectedListings = []
+  // Check if prerequisites are missing
+  const missingPrerequisites = checkPrerequisites(ctx, 'listing')
+
+  if (missingPrerequisites.length > 0) {
+    await ctx.reply(`You need to complete these steps first: ${missingPrerequisites.join(', ')}. Starting onboarding flow...`)
+    await startOnboardingFlow(ctx)
+    return
   }
 
-  const listings = ['Bounties', 'Projects']
+  const missing = getMissingOnboardingSteps(ctx)
 
-  const inlineKeyboard = [
-    ...listings.map((listing) => {
-      const isSelected = ctx.session.selectedListings!.includes(listing)
-      const checkbox = isSelected ? '✅' : '☐'
-      return [
-        { text: `${listing}`, callback_data: `toggle_listing_${listing.toLowerCase()}` },
-        { text: `${checkbox}`, callback_data: `toggle_listing_${listing.toLowerCase()}` },
-      ]
-    }),
-    [{ text: 'Done', callback_data: 'listing_done' }],
-  ]
-
-  try {
-    await ctx.replyWithPhoto('https://bob-intern-cdn.vercel.app/draft/welcome.png', {
-      caption: `Superteam Earn comes with Bounties and Projects, which you most prefer?`,
-      reply_markup: {
-        inline_keyboard: inlineKeyboard,
-      },
-    })
-  } catch (error) {
-    // Fallback to text message if image fails
-    console.error('Failed to send listing image:', error)
-    await ctx.reply(`Superteam Earn comes with Bounties and Projects, which you most prefer?`, {
-      reply_markup: {
-        inline_keyboard: inlineKeyboard,
-      },
-    })
+  // If multiple steps are missing, start onboarding flow from listing
+  if (missing.length > 1 && missing.includes('listing')) {
+    await startOnboardingFlow(ctx, 'listing')
+  } else {
+    // Just show listing selection (individual command mode)
+    ctx.session.isOnboarding = false
+    await showListingSelection(ctx)
   }
 }
