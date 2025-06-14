@@ -12,6 +12,7 @@
     "apps/bot": {
       "name": "bot",
       "dependencies": {
+        "@grammyjs/conversations": "^2.1.0",
         "@t3-oss/env-core": "^0.13.8",
         "dotenv": "^16.5.0",
         "grammy": "^1.36.3",
@@ -42,36 +43,6 @@
         "eslint-config-next": "15.3.3",
         "tailwindcss": "^4",
         "typescript": "^5",
-      },
-    },
-    "apps/telegram-bot": {
-      "name": "grammy-vercel",
-      "dependencies": {
-        "grammy": "^1.36.3",
-      },
-      "devDependencies": {
-        "@types/node": "^20.10.5",
-        "tsx": "^4.6.2",
-        "typescript": "^5.3.3",
-      },
-    },
-    "apps/web": {
-      "name": "web",
-      "version": "0.1.0",
-      "dependencies": {
-        "@repo/ui": "*",
-        "next": "^15.3.0",
-        "react": "^19.1.0",
-        "react-dom": "^19.1.0",
-      },
-      "devDependencies": {
-        "@repo/eslint-config": "*",
-        "@repo/typescript-config": "*",
-        "@types/node": "^22.15.3",
-        "@types/react": "19.1.0",
-        "@types/react-dom": "19.1.1",
-        "eslint": "^9.28.0",
-        "typescript": "5.8.2",
       },
     },
     "packages/eslint-config": {
@@ -196,6 +167,8 @@
     "@eslint/object-schema": ["@eslint/object-schema@2.1.6", "", {}, "sha512-RBMg5FRL0I0gs51M/guSAj5/e14VQ4tpZnQNWwuDT66P14I43ItmPfIZRhO9fUVIPOAQXU47atlywZ/czoqFPA=="],
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.3.2", "", { "dependencies": { "@eslint/core": "^0.15.0", "levn": "^0.4.1" } }, "sha512-4SaFZCNfJqvk/kenHpI8xvN42DMaoycy4PzKc5otHxRswww1kAt82OlBuwRVLofCACCTZEcla2Ydxv8scMXaTg=="],
+
+    "@grammyjs/conversations": ["@grammyjs/conversations@2.1.0", "", { "peerDependencies": { "grammy": "^1.20.1" } }, "sha512-nYoHwFyXcQ2lkQejKReoINknkgFjeIZhyJNMBwHng5UHO/ewHKs1dV2XVaLrKkHTZ1gCZ+dKkjEp26wwHyQeGg=="],
 
     "@grammyjs/types": ["@grammyjs/types@3.20.0", "", {}, "sha512-KIoikN5VTj6dcJpzMwXtouzaN3BZJ4jihBuEeXzWr25HtEfCF25V3dN11u+uNYi/9sBDvs0KCKZhyN/xFY0MBg=="],
 
@@ -748,8 +721,6 @@
     "gradient-string": ["gradient-string@2.0.2", "", { "dependencies": { "chalk": "^4.1.2", "tinygradient": "^1.1.5" } }, "sha512-rEDCuqUQ4tbD78TpzsMtt5OIf0cBCSDWSJtUDaF6JsAh+k0v9r++NzxNEG87oDZx9ZwGhD8DaezR2L/yrw0Jdw=="],
 
     "grammy": ["grammy@1.36.3", "", { "dependencies": { "@grammyjs/types": "3.20.0", "abort-controller": "^3.0.0", "debug": "^4.3.4", "node-fetch": "^2.7.0" } }, "sha512-OmoYn0WTETbMR7FbEy6QWx0Dvm3Md1O84UOgZLmj19mYlKbhefu2fSHDjoflxDNu8QgIrseQRsFSk4zRRcvJOA=="],
-
-    "grammy-vercel": ["grammy-vercel@workspace:apps/telegram-bot"],
 
     "graphemer": ["graphemer@1.4.0", "", {}, "sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag=="],
 
@@ -1307,8 +1278,6 @@
 
     "wcwidth": ["wcwidth@1.0.1", "", { "dependencies": { "defaults": "^1.0.3" } }, "sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg=="],
 
-    "web": ["web@workspace:apps/web"],
-
     "webidl-conversions": ["webidl-conversions@3.0.1", "", {}, "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ=="],
 
     "whatwg-url": ["whatwg-url@5.0.0", "", { "dependencies": { "tr46": "~0.0.3", "webidl-conversions": "^3.0.0" } }, "sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw=="],
@@ -1396,8 +1365,6 @@
     "figures/escape-string-regexp": ["escape-string-regexp@1.0.5", "", {}, "sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg=="],
 
     "globby/fast-glob": ["fast-glob@3.3.3", "", { "dependencies": { "@nodelib/fs.stat": "^2.0.2", "@nodelib/fs.walk": "^1.2.3", "glob-parent": "^5.1.2", "merge2": "^1.3.0", "micromatch": "^4.0.8" } }, "sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg=="],
-
-    "grammy-vercel/@types/node": ["@types/node@20.19.0", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-hfrc+1tud1xcdVTABC2JiomZJEklMcXYNTVtZLAeqTVWD+qL5jkHKT+1lOtqDdGxt+mB53DTtiz673vfjU8D1Q=="],
 
     "inquirer/ora": ["ora@5.4.1", "", { "dependencies": { "bl": "^4.1.0", "chalk": "^4.1.0", "cli-cursor": "^3.1.0", "cli-spinners": "^2.5.0", "is-interactive": "^1.0.0", "is-unicode-supported": "^0.1.0", "log-symbols": "^4.1.0", "strip-ansi": "^6.0.0", "wcwidth": "^1.0.1" } }, "sha512-5b6Y85tPxZZ7QytO+BQzysW31HJku27cRIlkbAXaNx+BdcVi+LlRFmVXzeF6a7JCwJpyw5c4b+YSVImQIrBpuQ=="],
 
